@@ -15,6 +15,9 @@ using System.Windows.Shapes;
 using System.Speech.Synthesis;
 using Microsoft.Win32;
 using System.IO;
+using System.Web;
+using System.Net.Http;
+using HtmlAgilityPack;
 
 namespace SpichHelper
 {
@@ -24,7 +27,7 @@ namespace SpichHelper
     public partial class MainWindow : Window
     {
         string speek;
-        public SpeechSynthesizer synth = new SpeechSynthesizer(); 
+        public SpeechSynthesizer synth = new SpeechSynthesizer();
         public MainWindow()
         {
             InitializeComponent();
@@ -36,7 +39,7 @@ namespace SpichHelper
             try
             {
                 OpenFileDialog dlg = new OpenFileDialog();
-                dlg.Filter = "Xaml|*.xaml|TXT|*.txt"; // Фильтр файлов в проводнике
+                dlg.Filter = "TXT|*.txt"; // Фильтр файлов в проводнике
                 Nullable<bool> result = dlg.ShowDialog();
                 if (result == true)
                 {
@@ -48,18 +51,41 @@ namespace SpichHelper
         }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            string path = GetPath();
-            speek = File.ReadAllText(path);
-        }
-
-        private void Speek_Play(object sender, RoutedEventArgs e)
-        {
             try
             {
+                string path = GetPath();
+                speek = File.ReadAllText(path);
+                pole.Text = speek;
                 Stop.Visibility = Visibility.Visible;
                 synth.SetOutputToDefaultAudioDevice();
                 synth.SpeakAsync(speek);
-            }catch (Exception E) { }
+            }
+            catch (Exception F) { return; }
+        }
+
+        private async void Speek_Play(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                HttpClient request = new HttpClient();
+                string page = await request.GetStringAsync("https://world-weather.ru/pogoda/russia/moscow/");
+                HtmlDocument dok = new HtmlDocument();
+                dok.LoadHtml(page);
+                HtmlNodeCollection nodes = dok.DocumentNode.SelectNodes("//ul");
+                int i = 0;
+                //if (nodes != null)
+                //    foreach (HtmlNode node in nodes)
+                //    {
+                //        i++;                                                  //щарим по всем тегам div
+                //        pole.Text += node.InnerText + i.ToString();
+                //    }
+                speek = nodes[2].InnerText + " " + nodes[4].InnerText;
+                pole.Text = nodes[2].InnerText + " " + nodes[4].InnerText;
+                Stop.Visibility = Visibility.Visible;
+                synth.SetOutputToDefaultAudioDevice();
+                synth.SpeakAsync(speek);
+            }
+            catch (Exception E) { }
         }
 
         private void Speek_Close(object sender, RoutedEventArgs e)

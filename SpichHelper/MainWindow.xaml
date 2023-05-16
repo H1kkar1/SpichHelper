@@ -7,9 +7,10 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <Button Content="Button" HorizontalAlignment="Left" Margin="49,27,0,0" VerticalAlignment="Top" Click="Button_Click"/>
-        <Button x:Name="Play" Content="Start" HorizontalAlignment="Left" Margin="110,27,0,0" VerticalAlignment="Top" Click="Speek_Play"/>
-        <Button x:Name="Stop" Content="Stop" HorizontalAlignment="Left" Margin="110,27,0,0" VerticalAlignment="Top" Click="Speek_Close"/>
+        <Button Content="Текст на выбор" HorizontalAlignment="Left" Margin="49,27,0,0" VerticalAlignment="Top" Click="Button_Click"/>
+        <Button x:Name="Play" Content="Погода" HorizontalAlignment="Left" Margin="49,52,0,0" VerticalAlignment="Top" Click="Speek_Play"/>
+        <Button x:Name="Stop" Content="Stop" HorizontalAlignment="Left" Margin="49,77,0,0" VerticalAlignment="Top" Click="Speek_Close"/>
+        <TextBlock Name="pole" HorizontalAlignment="Left" Margin="205,37,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" RenderTransformOrigin="-1.035,-0.518" Height="387" Width="585"/>
 
     </Grid>
 </Window>
